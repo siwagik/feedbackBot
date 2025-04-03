@@ -4,16 +4,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface Review {
-  text: string;
-  username: string;
-  userId: number;
-  messageId: number;
+    text: string;
+    username: string;
+    userId: number;
+    messageId: number;
 }
 
 const CONFIG = {
-  botToken: process.env.BOT_TOKEN!,
-  adminId: Number(process.env.ADMIN_ID),
-  channelId: Number(process.env.CHANNEL_ID),
+    botToken: process.env.BOT_TOKEN!,
+    adminId: Number(process.env.ADMIN_ID),
+    channelId: Number(process.env.CHANNEL_ID),
 } as const;
 
 const bot = new Bot(CONFIG.botToken);
@@ -21,20 +21,20 @@ const reviews = new Map<string, Review>();
 const waitingReview = new Set<number>();
 
 const getReviewKey = (userId: number, messageId: number): string => 
-  `${userId}_${messageId}`;
+    `${userId}_${messageId}`;
 
 const formatUsername = (username?: string): string => 
-  username ? `@${username}` : "Аноним";
+    username ? `@${username}` : "Аноним";
 
 const sendAdminMessage = async (
-  ctx: Context,
-  message: string,
-  keyboard?: InlineKeyboard
+    ctx: Context,
+    message: string,
+    keyboard?: InlineKeyboard
 ) => {
-  await ctx.api.sendMessage(CONFIG.adminId, message, {
-    parse_mode: "HTML",
-    reply_markup: keyboard,
-  });
+    await ctx.api.sendMessage(CONFIG.adminId, message, {
+        parse_mode: "HTML",
+        reply_markup: keyboard,
+    });
 };
 
 bot.catch((err) => {
@@ -51,14 +51,14 @@ bot.command("start", async (ctx) => {
             reply_markup: new InlineKeyboard().text("Оставить отзыв", "write_feedback"),
         });
     } catch(error) {
-        console.error("[BOT] Ошибк в обработчике /start: ",error);
+        console.error("[BOT] Ошибка в обработчике /start: ",error);
     }
 });
 
 bot.callbackQuery("write_feedback", async (ctx) => {
     try {
         if (!ctx.from) return;
-  
+
         waitingReview.add(ctx.from.id);
         await ctx.reply("Напиши свой отзыв:");
         await ctx.answerCallbackQuery();
@@ -70,7 +70,7 @@ bot.callbackQuery("write_feedback", async (ctx) => {
 bot.on("message:text", async (ctx) => {
     try {
         if (!ctx.from || !ctx.message?.text) return;
-  
+
         const { id: userId, username } = ctx.from;
         const { text, message_id: messageId } = ctx.message;
 
@@ -83,7 +83,7 @@ bot.on("message:text", async (ctx) => {
                 userId,
                 messageId,
             };
-  
+
             reviews.set(getReviewKey(userId, messageId), review);
 
             const adminKeyboard = new InlineKeyboard()
@@ -95,7 +95,7 @@ bot.on("message:text", async (ctx) => {
                 `<b>Новое сообщение</b>\n<b>Пользователь:</b>\n<blockquote>${review.username}</blockquote>\n<b>Отзыв:</b>\n<blockquote>${text}</blockquote>`,
                 adminKeyboard
             );
-  
+
             await ctx.reply("Отзыв был отправлен на модерацию!");
     } catch (error) {
         console.error("[BOT] Ошибка в обработчике текста: ");
