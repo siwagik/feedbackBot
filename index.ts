@@ -137,7 +137,7 @@ bot.on("callback_query:data", async (ctx) => {
 
 async function startBot() {
     try { 
-       await bot.start();
+        bot.start();
         console.log('[BOT] Бот успешно запущен');
     } catch (error) {
         console.error("[BOT] Ошибка при запуске бота:  ", error);
