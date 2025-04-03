@@ -1,0 +1,19 @@
+{
+  "name": "feedbackbot",
+  "version": "1.0.0",
+  "description": "Бот специальн для отзывов - будь то проекты, задачи или услуги.",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "keywords": [],
+  "author": "siwagik",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^22.13.17",
+    "dotenv": "^16.4.7",
+    "grammy": "^1.35.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
